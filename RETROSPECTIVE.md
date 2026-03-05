@@ -1,8 +1,8 @@
 # flowlyst Proposal App — Retrospective
 
 ## Current State (as of 2026-03-04)
-**Phase:** Pre-development — context files created, architecture finalized, hourly consulting page designed
-**Next action:** Begin Sprint 1 — `npx create-next-app` and project scaffolding
+**Phase:** Sprint 1 & 2 complete — app scaffolded, auth working, DB live, pushed to GitHub
+**Next action:** Sprint 3 — Admin panel (users/invite management, org types, modules, content blocks)
 
 ---
 
@@ -30,46 +30,64 @@
 
 ---
 
+## What's Been Done
+
+### 2026-03-04 — Sprint 1 & 2: Foundation + Auth
+
+**Sprint 1 — Scaffolding:**
+- ✅ Next.js 14 App Router scaffolded with TypeScript + Tailwind
+- ✅ All deps installed: `@supabase/supabase-js @supabase/ssr ai @anthropic-ai/sdk openai @google/generative-ai puppeteer`
+- ✅ Tailwind configured with full flowlyst brand tokens (teal, purple, charcoal, silver)
+- ✅ Nunito + DM Serif Display fonts (Google Fonts via next/font)
+- ✅ Full folder structure created (auth, app, admin, api routes, components, lib)
+- ✅ All TypeScript types defined in `src/types/index.ts`
+- ✅ Build passes clean (`npm run build` ✓)
+
+**Sprint 2 — Auth:**
+- ✅ Login page (`/login`) — flowlyst branded Google Sign-In
+- ✅ `middleware.ts` — protects all `/(app)/*` routes, redirects unauthenticated users
+- ✅ Auth callback route (`/api/auth/callback`)
+- ✅ `handle_new_user` trigger — auto-creates `user_profiles` row on first sign-in
+- ✅ Supabase project created, Google OAuth enabled, migration run
+- ✅ First login completed, admin role granted via SQL
+- ✅ Dashboard page + Sidebar nav (role-based admin links)
+
+**Infrastructure:**
+- ✅ DB schema migrated (`supabase/migrations/001_initial_schema.sql`) — all tables, RLS, seeds
+- ✅ GitHub repo created: `git@github.com:naysaziz/flowlyst-proposals.git`
+- ✅ `main` and `dev` branches pushed
+- ✅ `.gitignore` blocks all `.env` files
+
+---
+
 ## Up Next
 
-### Immediate (Sprint 1)
-- [ ] `npx create-next-app@latest` in `/proposal` — TypeScript + Tailwind
-- [ ] Install deps: `@supabase/supabase-js @supabase/ssr ai @anthropic-ai/sdk openai @google/generative-ai puppeteer`
-- [ ] Tailwind config with flowlyst brand colors + Nunito font
-- [ ] Supabase project: create project, run schema migrations
-- [ ] Enable Google OAuth in Supabase dashboard
-
-### Sprint 2: Auth
-- [ ] Login page (`/login`) — Google Sign-In, flowlyst branded
-- [ ] `middleware.ts` route protection
-- [ ] Auth callback route
-- [ ] User profile auto-creation trigger
-
-### Sprint 3: Admin
-- [ ] Users/invite management
-- [ ] Org types seed + admin UI
-- [ ] AI models seed + admin UI
-- [ ] Modules + content blocks admin
+### Sprint 3: Admin Panel
+- [ ] `/admin/users` — list users, invite by email, change roles
+- [ ] `/admin/org-types` — edit org type presets + AI tone notes
+- [ ] `/admin/modules` — manage proposal modules + pricing
+- [ ] `/admin/content` — edit content blocks (About flowlyst, Terms)
+- [ ] `/admin/ai-models` — enable/disable AI models
 
 ### Sprint 4: AI Writer
-- [ ] Vercel AI SDK provider adapters
-- [ ] `change-section` and `generate-proposal` API routes
-- [ ] `InlineChanger.tsx` component
-- [ ] `AIChatPanel.tsx` component
-- [ ] Model selector in topbar
+- [ ] Vercel AI SDK provider adapters (Anthropic, OpenAI, Google)
+- [ ] `POST /api/ai/change-section` — streaming section refine endpoint
+- [ ] `POST /api/ai/generate-proposal` — full proposal generator
+- [ ] `InlineChanger.tsx` — "Change with AI" per-section UI
+- [ ] `AIChatPanel.tsx` — slide-out chat panel
+- [ ] Model selector dropdown in topbar (saves to user preferences)
 
 ### Sprint 5: Training Proposal
-- [ ] Dashboard
-- [ ] Proposal form (training type, template-first)
-- [ ] Preview component (flowlyst branded)
-- [ ] PDF export
-- [ ] Shareable link
+- [ ] New proposal form (training type, template-first, org-type selector)
+- [ ] Training proposal preview component (flowlyst branded)
+- [ ] PDF export (`/api/pdf/[id]`)
+- [ ] Shareable link (`/share/[uuid]`)
 
 ---
 
 ## Blockers / Waiting On
-- User needs to provide: Supabase project URL + keys, Google OAuth credentials, API keys (Anthropic, OpenAI, Google), brand assets (logo SVGs, Cera Round Pro fonts)
-- `brew install poppler` needed to read brand book PDF
+- API keys still needed: Anthropic, OpenAI, Google (for AI writer — Sprint 4)
+- Brand assets still needed: logo SVGs, Cera Round Pro fonts (optional polish)
 
 ---
 

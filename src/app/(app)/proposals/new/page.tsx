@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -8,10 +8,12 @@ import type { OrganizationType, Module } from "@/types";
 
 export default function NewProposalPage() {
   const router = useRouter();
-  const supabase = createClient();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const supabase = useMemo(() => createClient(), []);
 
   const [orgTypes, setOrgTypes] = useState<OrganizationType[]>([]);
   const [allModules, setAllModules] = useState<Module[]>([]);
+  const [templateSections, setTemplateSections] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -28,12 +30,19 @@ export default function NewProposalPage() {
 
   useEffect(() => {
     async function load() {
-      const [{ data: orgData }, { data: modData }] = await Promise.all([
+      const [{ data: orgData }, { data: modData }, { data: templateData }] = await Promise.all([
         supabase.from("organization_types").select("*").eq("active", true).order("sort_order"),
         supabase.from("modules").select("*").eq("active", true).order("sort_order"),
+        supabase
+          .from("proposal_templates")
+          .select("sections")
+          .eq("proposal_type", "training")
+          .is("org_type_id", null)
+          .single(),
       ]);
       if (orgData) setOrgTypes(orgData);
       if (modData) setAllModules(modData);
+      if (templateData?.sections) setTemplateSections(templateData.sections as Record<string, string>);
       setLoading(false);
     }
     load();
@@ -81,6 +90,12 @@ export default function NewProposalPage() {
           org_type_id: form.org_type_id || null,
           include_hourly_page: includeHourly,
           created_by: user.id,
+          // Pre-fill all sections from template
+          cover_note: templateSections.cover_note ?? null,
+          scope_of_work: templateSections.scope_of_work ?? null,
+          training_package: templateSections.training_package ?? null,
+          deliverables: templateSections.deliverables ?? null,
+          timeline_content: templateSections.timeline_content ?? null,
         })
         .select()
         .single();

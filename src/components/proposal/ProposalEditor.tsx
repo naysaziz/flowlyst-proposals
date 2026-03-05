@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useModel } from "@/contexts/ModelContext";
@@ -52,11 +52,13 @@ export default function ProposalEditor({
   orgTypes,
   consultingRates,
 }: Props) {
-  const supabase = createClient();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const supabase = useMemo(() => createClient(), []);
   const { model } = useModel();
   const [aiPanelOpen, setAiPanelOpen] = useState(false);
   const [saveState, setSaveState] = useState<SaveState>("saved");
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const saveRef = useRef<() => void>(() => {});
 
   // ── Content fields ──────────────────────────────────────────────
   const [title, setTitle] = useState(proposal.title);
@@ -111,8 +113,8 @@ export default function ProposalEditor({
   const markDirty = useCallback(() => {
     setSaveState("dirty");
     clearTimeout(saveTimeoutRef.current);
-    saveTimeoutRef.current = setTimeout(() => save(), 2500);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    saveTimeoutRef.current = setTimeout(() => saveRef.current(), 2500);
+  }, []);
 
   async function save() {
     setSaveState("saving");
@@ -164,8 +166,15 @@ export default function ProposalEditor({
     }
   }
 
-  // Trigger auto-save when content changes
+  // Keep saveRef pointing at the latest save function (fixes stale closure)
   useEffect(() => {
+    saveRef.current = save;
+  });
+
+  // Trigger auto-save when content changes (skip initial mount)
+  const isMounted = useRef(false);
+  useEffect(() => {
+    if (!isMounted.current) { isMounted.current = true; return; }
     markDirty();
   }, [ // eslint-disable-line react-hooks/exhaustive-deps
     title, status, clientName, clientContact, clientEmail, proposalDate,

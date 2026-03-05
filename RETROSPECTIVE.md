@@ -118,10 +118,38 @@
 
 ---
 
+---
+
+### 2026-03-05 — Template Pre-fill (Sprint 5 Extension)
+
+- ✅ Read `docs/East Penn SD.pdf` and `docs/Brick Hourly Consulting Proposal.pdf` for real proposal content
+- ✅ Created `supabase/migrations/002_seed_templates.sql`:
+  - Replaced placeholder training modules with real packages:
+    - "AI Training — 3-Hour Half-Day Workshop" → $6,500 (+ travel billed at cost)
+    - "AI Training — Full-Day Workshop (5 Hours)" → $9,500 (+ travel billed at cost)
+  - Updated `about_flowlyst_full` content block with richer Aziz bio (19 yrs, CFO, CPS, EBRD, etc.)
+  - Inserted "AI Training — Default" template with all 5 sections fully pre-filled from real proposal content
+- ✅ Updated `proposals/new/page.tsx` to:
+  - Fetch generic training template on page load
+  - Apply all template sections (cover_note, scope_of_work, training_package, deliverables, timeline_content) on proposal creation
+- ✅ New proposals now arrive in editor fully pre-filled — ready to send or refine with AI
+
+**Run `002_seed_templates.sql` in Supabase SQL editor to activate**
+
+---
+
+### 2026-03-05 — Bug Fixes
+
+- ✅ Fixed infinite re-render loop: `createClient()` was called every render and used as a `useEffect`/`useCallback` dep — replaced with `useMemo(() => createClient(), [])` in `ModelContext.tsx`, `ProposalEditor.tsx`, and `proposals/new/page.tsx`
+- ✅ Fixed stale closure in auto-save: `markDirty` was `useCallback([])` so `save()` always used initial render's state — fixed with `saveRef` pattern (ref updated every render, timeout calls `saveRef.current()`)
+- ✅ Fixed auto-save firing on initial mount (unnecessary save on page open) — added `isMounted` ref guard
+- ✅ Cleared stale `.next/` build cache that caused `Cannot find module './948.js'` errors after running `next build` while dev server was active
+
+---
+
 ## Up Next
 
 **All core phases complete.** Remaining polish / future work:
-- Add proposal templates (seed `proposal_templates` table from admin) for true template-first pre-fill
 - Phase 2: Software/Budget proposals
 - Phase 3: Salary Projection proposals
 - Polish: Cera Round Pro fonts, logo SVG assets, email sharing

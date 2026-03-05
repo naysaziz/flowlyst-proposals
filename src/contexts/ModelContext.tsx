@@ -6,6 +6,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from "react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -27,7 +28,8 @@ export function ModelProvider({
   defaultModel?: string;
 }) {
   const [model, setModelState] = useState(defaultModel);
-  const supabase = createClient();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const supabase = useMemo(() => createClient(), []);
 
   const setModel = useCallback(
     async (newModel: string) => {

@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── flowlyst CSS Variables ───────────────────────────── */
+:root {
+  --teal: #00A568;
+  --teal-light: #E6F7F1;
+  --teal-dark: #007F50;
+  --purple: #5F5AA2;
+  --purple-light: #EFEEFC;
+  --dark: #404041;
+  --mid: #767677;
+  --muted: #A8A8A9;
+  --light: #E2E2E2;
+  --bg: #F4F5F7;
+  --white: #FFFFFF;
+
+  --background: var(--bg);
+  --foreground: var(--dark);
+}
+
+/* ─── Base ──────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+html { -webkit-font-smoothing: antialiased; }
+
+body { background: var(--bg); color: var(--dark); }
+
+/* ─── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--light); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ─── Utilities ─────────────────────────────────────────── */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .text-gradient {
+    background: linear-gradient(135deg, var(--teal) 0%, var(--purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-brand-gradient {
+    background: linear-gradient(140deg, var(--teal) 0%, var(--purple) 100%);
+  }
+}
+
+/* ─── Animations ─────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulseTeal {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-fade-up    { animation: fadeUp 0.4s ease both; }
+.animate-fade-in    { animation: fadeIn 0.3s ease both; }
+.animate-slide-right { animation: slideInRight 0.3s ease both; }
+.animate-pulse-teal { animation: pulseTeal 1.5s ease-in-out infinite; }
+
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.10s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.20s; }
+.delay-5 { animation-delay: 0.25s; }
+
+/* ─── Print / PDF ────────────────────────────────────────── */
+@media print {
+  body { background: white; }
+  .no-print { display: none !important; }
+  .print-break { page-break-after: always; }
+}

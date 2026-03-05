@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flowlyst — Proposals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal: #00A568;
+      --teal-light: #E6F7F1;
+      --teal-dark: #007F50;
+      --purple: #5F5AA2;
+      --purple-light: #EFEEFC;
+      --dark: #404041;
+      --mid: #767677;
+      --muted: #A8A8A9;
+      --light: #E2E2E2;
+      --bg: #F4F5F7;
+      --white: #FFFFFF;
+      --radius: 14px;
+      --radius-sm: 9px;
+      --radius-xs: 6px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
+      --shadow: 0 2px 8px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.08), 0 24px 48px rgba(0,0,0,0.05);
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      display: flex;
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── SIDEBAR ─────────────────────────────────────────── */
+    .sidebar {
+      width: 248px;
+      min-height: 100vh;
+      background: var(--white);
+      border-right: 1px solid #EBEBEB;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      z-index: 100;
+    }
+
+    .sidebar-brand {
+      padding: 22px 20px 18px;
+      border-bottom: 1px solid #F2F2F2;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .brand-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(140deg, var(--teal) 0%, var(--purple) 100%);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,165,104,0.3);
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--dark);
+      letter-spacing: -0.4px;
+    }
+
+    .brand-tagline {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-top: 1px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .nav-section {
+      font-size: 9.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      padding: 14px 10px 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-weight: 600;
+      font-size: 13.5px;
+      color: var(--mid);
+      user-select: none;
+    }
+
+    .nav-item:hover { background: var(--bg); color: var(--dark); }
+    .nav-item.active { background: var(--teal-light); color: var(--teal); }
+    .nav-item svg { flex-shrink: 0; opacity: 0.65; }
+    .nav-item.active svg { opacity: 1; }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--teal);
+      color: white;
+      font-size: 10px; font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 20px;
+      min-width: 22px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid #F2F2F2;
+    }
+
+    .user-card {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .user-card:hover { background: var(--bg); }
+
+    .user-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal) 0%, var(--purple) 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .user-name { font-size: 13.5px; font-weight: 800; color: var(--dark); }
+    .user-org { font-size: 11px; font-weight: 600; color: var(--muted); }
+
+    /* ─── MAIN ────────────────────────────────────────────── */
+    .main {
+      margin-left: 248px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid #EBEBEB;
+      padding: 0 32px;
+      height: 62px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+
+    .topbar-title {
+      font-size: 18px; font-weight: 900; color: var(--dark); letter-spacing: -0.3px;
+    }
+
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+    /* ─── BUTTONS ─────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-family: 'Nunito', sans-serif;
+      font-size: 13.5px; font-weight: 700;
+      cursor: pointer; border: none; outline: none;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--teal); color: white;
+    }
+    .btn-primary:hover {
+      background: var(--teal-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0,165,104,0.35);
+    }
+
+    .btn-secondary {
+      background: var(--bg); color: var(--dark);
+      border: 1.5px solid var(--light);
+    }
+    .btn-secondary:hover { background: #EBEBEB; }
+
+    .btn-ghost { background: transparent; color: var(--mid); }
+    .btn-ghost:hover { background: var(--bg); color: var(--dark); }
+
+    .btn-icon {
+      width: 36px; height: 36px; padding: 0;
+      justify-content: center;
+      background: var(--bg); color: var(--mid);
+      border: 1.5px solid var(--light);
+      border-radius: var(--radius-sm);
+    }
+    .btn-icon:hover { background: #EBEBEB; color: var(--dark); }
+
+    /* ─── CONTENT ─────────────────────────────────────────── */
+    .content { padding: 28px 32px; flex: 1; }
+
+    /* ─── STATS ───────────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px 22px 18px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: fadeUp 0.45s ease both;
+    }
+    .stat-card:nth-child(1) { animation-delay: 0.04s; }
+    .stat-card:nth-child(2) { animation-delay: 0.08s; }
+    .stat-card:nth-child(3) { animation-delay: 0.12s; }
+    .stat-card:nth-child(4) { animation-delay: 0.16s; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+    .stat-icon-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .stat-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .stat-trend {
+      font-size: 11.5px; font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+    .trend-up { background: var(--teal-light); color: var(--teal); }
+    .trend-neutral { background: var(--purple-light); color: var(--purple); }
+    .trend-gold { background: #FFF7E6; color: #C68A00; }
+
+    .stat-value {
+      font-size: 30px; font-weight: 900; color: var(--dark);
+      letter-spacing: -1.5px; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-value.c-teal { color: var(--teal); }
+    .stat-value.c-purple { color: var(--purple); }
+    .stat-value.c-gold { color: #C68A00; }
+
+    .stat-label {
+      font-size: 12px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.6px;
+    }
+
+    /* ─── TABLE SECTION ───────────────────────────────────── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 15px; font-weight: 900; color: var(--dark); letter-spacing: -0.2px;
+    }
+
+    .filter-pills { display: flex; gap: 6px; }
+
+    .filter-pill {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12.5px; font-weight: 700;
+      cursor: pointer; border: none;
+      font-family: 'Nunito', sans-serif;
+      transition: all 0.15s;
+    }
+    .filter-pill.active { background: var(--dark); color: white; }
+    .filter-pill:not(.active) {
+      background: var(--white); color: var(--mid);
+      box-shadow: var(--shadow-sm);
+      border: 1.5px solid var(--light);
+    }
+    .filter-pill:not(.active):hover { background: var(--bg); color: var(--dark); }
+
+    .proposals-table {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      animation: fadeUp 0.45s ease 0.2s both;
+    }
+
+    .table-head {
+      display: grid;
+      grid-template-columns: 2.2fr 1.3fr 100px 130px 110px 90px;
+      padding: 11px 24px;
+      background: var(--bg);
+      border-bottom: 1px solid #EBEBEB;
+    }
+
+    .th {
+      font-size: 10.5px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.9px;
+      color: var(--muted);
+    }
+    .th.right { text-align: right; }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 2.2fr 1.3fr 100px 130px 110px 90px;
+      padding: 15px 24px;
+      border-bottom: 1px solid #F5F5F5;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .table-row:last-child { border-bottom: none; }
+    .table-row:hover { background: #FAFAFA; }
+    .table-row:hover .row-title { color: var(--teal); }
+
+    .row-title {
+      font-size: 13.5px; font-weight: 800; color: var(--dark);
+      transition: color 0.12s;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      padding-right: 12px;
+    }
+    .row-sub { font-size: 11.5px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+
+    .type-chip {
+      display: inline-block;
+      font-size: 11px; font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 5px;
+    }
+    .type-software { background: #EEF6FF; color: #2A7FD4; }
+    .type-training { background: var(--purple-light); color: var(--purple); }
+    .type-salary { background: #FFF4ED; color: #D06B2A; }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11.5px; font-weight: 700;
+    }
+    .status-badge::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+    }
+    .s-draft { background: #F5F5F5; color: #999; }
+    .s-draft::before { background: #BBB; }
+    .s-sent { background: #EEF6FF; color: #2A7FD4; }
+    .s-sent::before { background: #2A7FD4; }
+    .s-accepted { background: var(--teal-light); color: var(--teal); }
+    .s-accepted::before { background: var(--teal); }
+    .s-declined { background: #FFF0F0; color: #D44B4B; }
+    .s-declined::before { background: #D44B4B; }
+
+    .row-date { font-size: 12.5px; font-weight: 600; color: var(--mid); }
+    .row-value { font-size: 14px; font-weight: 900; color: var(--dark); text-align: right; }
+
+    /* ─── FORM VIEW ───────────────────────────────────────── */
+    .form-view, .preview-view { display: none; }
+    .form-view.active, .preview-view.active { display: block; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 700; color: var(--muted);
+      cursor: pointer; padding: 4px 0; margin-bottom: 22px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--teal); }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 14px;
+      animation: fadeUp 0.35s ease both;
+    }
+    .form-card:nth-child(1) { animation-delay: 0.05s; }
+    .form-card:nth-child(2) { animation-delay: 0.10s; }
+
+    .form-card-header {
+      padding: 16px 22px;
+      border-bottom: 1px solid #F2F2F2;
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .card-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px; background: var(--teal-light);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--teal); flex-shrink: 0;
+    }
+
+    .form-card-title { font-size: 14px; font-weight: 800; color: var(--dark); }
+
+    .form-card-body { padding: 22px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-row:last-child { margin-bottom: 0; }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+    .form-label {
+      font-size: 11px; font-weight: 800; color: var(--dark);
+      text-transform: uppercase; letter-spacing: 0.6px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      padding: 9px 13px;
+      border: 1.5px solid var(--light);
+      border-radius: var(--radius-xs);
+      font-family: 'Nunito', sans-serif;
+      font-size: 13.5px; font-weight: 600; color: var(--dark);
+      background: var(--white);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none; -webkit-appearance: none;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: #BBBBBC; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0,165,104,0.1);
+    }
+    .form-textarea { resize: vertical; min-height: 78px; line-height: 1.6; }
+
+    /* Modules */
+    .module-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .module-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 14px;
+      border: 1.5px solid #EBEBEB;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .module-item:hover { border-color: var(--teal); background: #FCFFFE; }
+    .module-item.on { border-color: var(--teal); background: var(--teal-light); }
+
+    .module-check {
+      width: 18px; height: 18px;
+      border: 2px solid var(--light);
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.15s;
+    }
+    .module-item.on .module-check { background: var(--teal); border-color: var(--teal); }
+
+    .module-info { flex: 1; }
+    .module-name { font-size: 13.5px; font-weight: 700; color: var(--dark); }
+    .module-note { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+    .module-item.on .module-name { color: var(--teal-dark); }
+
+    .module-price {
+      font-size: 14px; font-weight: 900; color: var(--dark);
+      flex-shrink: 0;
+    }
+    .module-item.on .module-price { color: var(--teal); }
+
+    /* Summary card */
+    .summary-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      position: sticky; top: 76px;
+      animation: fadeUp 0.35s ease 0.15s both;
+    }
+
+    .summary-hero {
+      background: linear-gradient(140deg, var(--teal) 0%, var(--purple) 100%);
+      padding: 22px 24px;
+      color: white;
+    }
+    .summary-hero-label {
+      font-size: 10.5px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; opacity: 0.75; margin-bottom: 5px;
+    }
+    .summary-hero-amount {
+      font-size: 36px; font-weight: 900; letter-spacing: -2px; line-height: 1;
+    }
+    .summary-hero-sub {
+      font-size: 11.5px; opacity: 0.65; margin-top: 6px; font-weight: 600;
+    }
+
+    .summary-body { padding: 18px 22px; }
+
+    .summary-line {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 8px 0;
+      border-bottom: 1px solid #F5F5F5;
+    }
+    .summary-line:last-of-type { border-bottom: none; }
+    .summary-line-label { font-size: 12.5px; font-weight: 600; color: var(--mid); }
+    .summary-line-val { font-size: 13px; font-weight: 800; color: var(--dark); }
+
+    .summary-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 13px 0 0;
+      border-top: 2px solid var(--dark);
+      margin-top: 6px;
+    }
+    .summary-total-label { font-size: 13px; font-weight: 900; color: var(--dark); }
+    .summary-total-val { font-size: 20px; font-weight: 900; color: var(--teal); }
+
+    .summary-deposit {
+      background: var(--teal-light);
+      border-radius: var(--radius-xs);
+      padding: 10px 12px;
+      font-size: 12px; font-weight: 700; color: var(--teal);
+      display: flex; justify-content: space-between;
+      margin-top: 12px;
+    }
+
+    .toggle-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12.5px; font-weight: 700; color: var(--mid);
+      cursor: pointer; padding: 10px 0;
+    }
+    .toggle-label input { accent-color: var(--teal); width: 14px; height: 14px; }
+
+    .form-actions {
+      display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px;
+    }
+
+    /* ─── PREVIEW ─────────────────────────────────────────── */
+    .preview-toolbar {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 14px 22px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+      animation: fadeUp 0.3s ease both;
+    }
+
+    .share-url-pill {
+      font-size: 12px; font-weight: 600; color: var(--mid);
+      background: var(--bg); padding: 7px 14px;
+      border-radius: var(--radius-sm); font-family: monospace;
+      border: 1.5px solid var(--light);
+    }
+
+    .preview-frame {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      max-width: 820px;
+      margin: 0 auto;
+      animation: fadeUp 0.4s ease 0.08s both;
+    }
+
+    .preview-cover {
+      background: linear-gradient(140deg, var(--teal) 0%, var(--purple) 100%);
+      padding: 52px 60px 48px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preview-cover::after {
+      content: '';
+      position: absolute;
+      right: -60px; bottom: -80px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .preview-cover::before {
+      content: '';
+      position: absolute;
+      right: 60px; top: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .cover-eyebrow {
+      font-size: 10.5px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 2.5px; opacity: 0.65; margin-bottom: 18px;
+    }
+
+    .cover-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 38px; font-style: italic;
+      line-height: 1.2; margin-bottom: 36px;
+      max-width: 480px;
+      position: relative; z-index: 1;
+    }
+
+    .cover-meta {
+      display: flex; gap: 44px;
+      position: relative; z-index: 1;
+    }
+
+    .cover-meta-item {}
+    .cover-meta-label {
+      font-size: 9.5px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1.2px; opacity: 0.6; margin-bottom: 4px;
+    }
+    .cover-meta-value { font-size: 14px; font-weight: 700; }
+
+    .preview-body { padding: 44px 60px; }
+
+    .preview-section {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 2px; color: var(--teal);
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .preview-section::after {
+      content: ''; flex: 1; height: 1px; background: #EBEBEB;
+    }
+
+    .preview-text {
+      font-size: 14px; font-weight: 500; color: var(--mid);
+      line-height: 1.75; margin-bottom: 32px;
+    }
+
+    .modules-table {
+      width: 100%; border-collapse: collapse; margin-bottom: 28px;
+    }
+    .modules-table th {
+      font-size: 10.5px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--muted);
+      padding: 10px 16px; background: var(--bg);
+      text-align: left;
+    }
+    .modules-table th:last-child { text-align: right; }
+    .modules-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #F5F5F5;
+      font-size: 13.5px;
+    }
+    .modules-table td:last-child { text-align: right; font-weight: 900; color: var(--dark); }
+    .mod-name { font-weight: 700; color: var(--dark); }
+    .mod-note { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+
+    .totals-block {
+      margin-left: auto;
+      width: 290px;
+    }
+    .totals-row {
+      display: flex; justify-content: space-between;
+      padding: 7px 0; font-size: 13px;
+    }
+    .totals-row-label { font-weight: 600; color: var(--mid); }
+    .totals-row-val { font-weight: 800; color: var(--dark); }
+    .totals-row.total-main {
+      border-top: 2.5px solid var(--dark); margin-top: 8px; padding-top: 14px;
+      font-size: 16px;
+    }
+    .totals-row.total-main .totals-row-label { font-weight: 900; color: var(--dark); }
+    .totals-row.total-main .totals-row-val { font-weight: 900; color: var(--teal); }
+
+    .preview-footer {
+      background: var(--dark);
+      padding: 28px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-brand { font-size: 17px; font-weight: 900; color: white; letter-spacing: -0.3px; }
+    .footer-sub { font-size: 10.5px; color: rgba(255,255,255,0.35); margin-top: 3px; }
+    .footer-note { font-size: 11.5px; color: rgba(255,255,255,0.45); text-align: right; line-height: 1.6; }
+
+    /* ─── ANIMATIONS ──────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SCROLLBAR ───────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--light); border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ SIDEBAR ═══════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M5 4h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5V4z" fill="white"/>
+            <path d="M5 11h9a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5v-4z" fill="rgba(255,255,255,0.75)"/>
+            <path d="M5 18h11a1 1 0 0 1 1 1v1H5v-2z" fill="rgba(255,255,255,0.5)"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Flowlyst</div>
+          <div class="brand-tagline">Proposals</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">Main</div>
+      <div class="nav-item active" onclick="showDashboard()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Dashboard
+        <span class="nav-badge">12</span>
+      </div>
+      <div class="nav-item" onclick="showDashboard()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Proposals
+      </div>
+
+      <div class="nav-section">Admin</div>
+      <div class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        Modules
+      </div>
+      <div class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Content Blocks
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar">A</div>
+        <div>
+          <div class="user-name">Aziz</div>
+          <div class="user-org">Flowlyst Consulting</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══════════════════════════════════════════════ -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-icon" title="Search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="btn btn-primary" id="new-btn" onclick="showForm()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Proposal
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ─── DASHBOARD ──────────────────────────────────── -->
+      <div id="dashboard-view">
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-icon-row">
+              <div class="stat-icon" style="background:#EEF6FF;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A7FD4" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              </div>
+              <span class="stat-trend trend-up">↑ 3</span>
+            </div>
+            <div class="stat-value">12</div>
+            <div class="stat-label">Total Proposals</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon-row">
+              <div class="stat-icon" style="background:var(--purple-light);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+              </div>
+              <span class="stat-trend trend-neutral">2 active</span>
+            </div>
+            <div class="stat-value c-purple">5</div>
+            <div class="stat-label">Sent</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon-row">
+              <div class="stat-icon" style="background:var(--teal-light);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+              </div>
+              <span class="stat-trend trend-up">33% rate</span>
+            </div>
+            <div class="stat-value c-teal">4</div>
+            <div class="stat-label">Accepted</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon-row">
+              <div class="stat-icon" style="background:#FFF7E6;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C68A00" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <span class="stat-trend trend-gold">↑ 12%</span>
+            </div>
+            <div class="stat-value c-gold">$82K</div>
+            <div class="stat-label">Revenue Closed</div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <div class="section-title">All Proposals</div>
+          <div class="filter-pills">
+            <button class="filter-pill active" onclick="setFilter(this)">All</button>
+            <button class="filter-pill" onclick="setFilter(this)">Draft</button>
+            <button class="filter-pill" onclick="setFilter(this)">Sent</button>
+            <button class="filter-pill" onclick="setFilter(this)">Accepted</button>
+          </div>
+        </div>
+
+        <div class="proposals-table">
+          <div class="table-head">
+            <div class="th">Proposal</div>
+            <div class="th">Client</div>
+            <div class="th">Type</div>
+            <div class="th">Status</div>
+            <div class="th">Date</div>
+            <div class="th right">Value</div>
+          </div>
+
+          <div class="table-row" onclick="showPreview()">
+            <div>
+              <div class="row-title">Software & Budget Management Suite</div>
+              <div class="row-sub">Prepared by Aziz · Jan 15</div>
+            </div>
+            <div><div class="row-sub" style="font-size:13px;font-weight:700;color:var(--dark)">Briarcliff Manor, NY</div></div>
+            <div><span class="type-chip type-software">Software</span></div>
+            <div><span class="status-badge s-accepted">Accepted</span></div>
+            <div class="row-date">Jan 15, 2025</div>
+            <div class="row-value">$38,500</div>
+          </div>
+
+          <div class="table-row" onclick="showPreview()">
+            <div>
+              <div class="row-title">AI Training for SME Consultants</div>
+              <div class="row-sub">Prepared by Aziz · Feb 3</div>
+            </div>
+            <div><div class="row-sub" style="font-size:13px;font-weight:700;color:var(--dark)">EBRD, London</div></div>
+            <div><span class="type-chip type-training">Training</span></div>
+            <div><span class="status-badge s-sent">Sent</span></div>
+            <div class="row-date">Feb 3, 2025</div>
+            <div class="row-value">$24,000</div>
+          </div>
+
+          <div class="table-row" onclick="showPreview()">
+            <div>
+              <div class="row-title">Salary Projection & HR Analytics</div>
+              <div class="row-sub">Prepared by Aziz · Jan 28</div>
+            </div>
+            <div><div class="row-sub" style="font-size:13px;font-weight:700;color:var(--dark)">Oswego CUSD 308, IL</div></div>
+            <div><span class="type-chip type-salary">Salary</span></div>
+            <div><span class="status-badge s-accepted">Accepted</span></div>
+            <div class="row-date">Jan 28, 2025</div>
+            <div class="row-value">$19,800</div>
+          </div>
+
+          <div class="table-row" onclick="showPreview()">
+            <div>
+              <div class="row-title">District-Wide Training Program</div>
+              <div class="row-sub">Prepared by Aziz · Mar 1</div>
+            </div>
+            <div><div class="row-sub" style="font-size:13px;font-weight:700;color:var(--dark)">East Penn SD, PA</div></div>
+            <div><span class="type-chip type-training">Training</span></div>
+            <div><span class="status-badge s-draft">Draft</span></div>
+            <div class="row-date">Mar 1, 2025</div>
+            <div class="row-value">$16,400</div>
+          </div>
+
+          <div class="table-row">
+            <div>
+              <div class="row-title">Budget Tracking & Reporting</div>
+              <div class="row-sub">Prepared by Aziz · Feb 18</div>
+            </div>
+            <div><div class="row-sub" style="font-size:13px;font-weight:700;color:var(--dark)">Greenfield Township, MI</div></div>
+            <div><span class="type-chip type-software">Software</span></div>
+            <div><span class="status-badge s-sent">Sent</span></div>
+            <div class="row-date">Feb 18, 2025</div>
+            <div class="row-value">$22,750</div>
+          </div>
+
+          <div class="table-row">
+            <div>
+              <div class="row-title">Financial Dashboard Implementation</div>
+              <div class="row-sub">Prepared by Aziz · Dec 10</div>
+            </div>
+            <div><div class="row-sub" style="font-size:13px;font-weight:700;color:var(--dark)">Lakewood USD, CO</div></div>
+            <div><span class="type-chip type-software">Software</span></div>
+            <div><span class="status-badge s-declined">Declined</span></div>
+            <div class="row-date">Dec 10, 2024</div>
+            <div class="row-value">$31,200</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── FORM VIEW ──────────────────────────────────── -->
+      <div class="form-view" id="form-view">
+        <div class="back-link" onclick="showDashboard()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12,19 5,12 12,5"/></svg>
+          Back to Dashboard
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <!-- Client Info -->
+            <div class="form-card">
+              <div class="form-card-header">
+                <div class="card-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="form-card-title">Client Information</div>
+              </div>
+              <div class="form-card-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Client Name</label>
+                    <input type="text" class="form-input" placeholder="e.g. Briarcliff Manor" value="Briarcliff Manor" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Contact Person</label>
+                    <input type="text" class="form-input" placeholder="Full name" />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="contact@client.org" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Proposal Type</label>
+                    <select class="form-select">
+                      <option>Software / Budget</option>
+                      <option>Training</option>
+                      <option>Salary Projection</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label class="form-label">Cover Note</label>
+                    <textarea class="form-textarea" placeholder="Personalized opening paragraph for this proposal...">Thank you for the opportunity to present this proposal to Briarcliff Manor. We understand the importance of modernizing your budget management workflows...</textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modules -->
+            <div class="form-card">
+              <div class="form-card-header">
+                <div class="card-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                </div>
+                <div class="form-card-title">Select Modules</div>
+              </div>
+              <div class="form-card-body">
+                <div class="module-list">
+                  <div class="module-item on" onclick="toggleMod(this)">
+                    <div class="module-check">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20,6 9,17 4,12"/></svg>
+                    </div>
+                    <div class="module-info">
+                      <div class="module-name">Budget Entry Module</div>
+                      <div class="module-note">Year 1 includes full setup & data migration</div>
+                    </div>
+                    <div class="module-price">$8,500</div>
+                  </div>
+                  <div class="module-item on" onclick="toggleMod(this)">
+                    <div class="module-check">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20,6 9,17 4,12"/></svg>
+                    </div>
+                    <div class="module-info">
+                      <div class="module-name">Financial Dashboards</div>
+                      <div class="module-note">Up to 5 custom dashboards</div>
+                    </div>
+                    <div class="module-price">$6,200</div>
+                  </div>
+                  <div class="module-item on" onclick="toggleMod(this)">
+                    <div class="module-check">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20,6 9,17 4,12"/></svg>
+                    </div>
+                    <div class="module-info">
+                      <div class="module-name">Reporting & Export Suite</div>
+                      <div class="module-note">PDF, Excel, and board-ready formats</div>
+                    </div>
+                    <div class="module-price">$4,800</div>
+                  </div>
+                  <div class="module-item" onclick="toggleMod(this)">
+                    <div class="module-check"></div>
+                    <div class="module-info">
+                      <div class="module-name">Salary Projection Add-on</div>
+                      <div class="module-note">Multi-year projections with COLA settings</div>
+                    </div>
+                    <div class="module-price">$7,400</div>
+                  </div>
+                  <div class="module-item" onclick="toggleMod(this)">
+                    <div class="module-check"></div>
+                    <div class="module-info">
+                      <div class="module-name">Training Program</div>
+                      <div class="module-note">8 on-site sessions + materials</div>
+                    </div>
+                    <div class="module-price">$12,000</div>
+                  </div>
+                  <div class="module-item on" onclick="toggleMod(this)">
+                    <div class="module-check">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20,6 9,17 4,12"/></svg>
+                    </div>
+                    <div class="module-info">
+                      <div class="module-name">Implementation & Onboarding</div>
+                      <div class="module-note">8 hours staff training included</div>
+                    </div>
+                    <div class="module-price">$3,500</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-secondary" onclick="showDashboard()">Save Draft</button>
+              <button class="btn btn-secondary" onclick="showPreview()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Preview
+              </button>
+              <button class="btn btn-primary" onclick="showPreview()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+                Generate & Send
+              </button>
+            </div>
+          </div>
+
+          <!-- Sticky summary -->
+          <div>
+            <div class="summary-card">
+              <div class="summary-hero">
+                <div class="summary-hero-label">Year 1 Total</div>
+                <div class="summary-hero-amount">$23,000</div>
+                <div class="summary-hero-sub">4 modules selected</div>
+              </div>
+              <div class="summary-body">
+                <div class="summary-line">
+                  <span class="summary-line-label">Budget Entry Module</span>
+                  <span class="summary-line-val">$8,500</span>
+                </div>
+                <div class="summary-line">
+                  <span class="summary-line-label">Financial Dashboards</span>
+                  <span class="summary-line-val">$6,200</span>
+                </div>
+                <div class="summary-line">
+                  <span class="summary-line-label">Reporting & Export Suite</span>
+                  <span class="summary-line-val">$4,800</span>
+                </div>
+                <div class="summary-line">
+                  <span class="summary-line-label">Implementation & Onboarding</span>
+                  <span class="summary-line-val">$3,500</span>
+                </div>
+                <div class="summary-total">
+                  <span class="summary-total-label">Subtotal</span>
+                  <span class="summary-total-val">$23,000</span>
+                </div>
+                <div class="summary-deposit">
+                  <span>Deposit at signing</span>
+                  <span>−$5,000</span>
+                </div>
+                <div style="margin-top:6px;padding:10px 12px;border-radius:var(--radius-xs);font-size:12.5px;font-weight:800;color:var(--dark);display:flex;justify-content:space-between;">
+                  <span>Balance Due</span>
+                  <span style="color:var(--dark)">$18,000</span>
+                </div>
+                <div style="margin-top:4px;">
+                  <label class="toggle-label">
+                    <input type="checkbox" /> Include Year 2+ Pricing
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PREVIEW VIEW ───────────────────────────────── -->
+      <div class="preview-view" id="preview-view">
+        <div class="back-link" onclick="showForm()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12,19 5,12 12,5"/></svg>
+          Back to Editor
+        </div>
+
+        <div class="preview-toolbar">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:var(--dark);margin-bottom:5px;">Shareable Link</div>
+            <div class="share-url-pill">flowlyst.app/share/a3f7c9d2-4e1b-4a2c-9f83-d2b4e6f1c8a9</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy Link
+            </button>
+            <button class="btn btn-secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </button>
+            <button class="btn btn-primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="preview-frame">
+          <div class="preview-cover">
+            <div class="cover-eyebrow">Consulting Proposal · Software / Budget</div>
+            <div class="cover-title">Software & Budget Management Suite</div>
+            <div class="cover-meta">
+              <div class="cover-meta-item">
+                <div class="cover-meta-label">Prepared for</div>
+                <div class="cover-meta-value">Briarcliff Manor</div>
+              </div>
+              <div class="cover-meta-item">
+                <div class="cover-meta-label">Date</div>
+                <div class="cover-meta-value">March 4, 2025</div>
+              </div>
+              <div class="cover-meta-item">
+                <div class="cover-meta-label">Total Investment</div>
+                <div class="cover-meta-value">$23,000</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-body">
+            <div class="preview-section">Introduction</div>
+            <p class="preview-text">
+              Thank you for the opportunity to present this proposal to Briarcliff Manor. We understand the importance of modernizing your budget management workflows, and we're excited to offer a tailored solution that combines powerful software tools with hands-on implementation support. This proposal outlines the modules best suited to your district's needs and our investment structure for Year 1.
+            </p>
+
+            <div class="preview-section">About Flowlyst</div>
+            <p class="preview-text">
+              Flowlyst is a boutique technology consulting firm specializing in financial systems for public sector clients. With over a decade of experience implementing budget and reporting solutions for municipalities and school districts, we bring both technical expertise and deep domain knowledge to every engagement.
+            </p>
+
+            <div class="preview-section">Proposed Modules</div>
+            <table class="modules-table">
+              <thead>
+                <tr>
+                  <th style="width:40%">Module</th>
+                  <th>Description</th>
+                  <th>Investment</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="mod-name">Budget Entry Module</div></td>
+                  <td><div class="mod-note">Year 1 includes full setup & data migration</div></td>
+                  <td>$8,500</td>
+                </tr>
+                <tr>
+                  <td><div class="mod-name">Financial Dashboards</div></td>
+                  <td><div class="mod-note">Up to 5 custom dashboards</div></td>
+                  <td>$6,200</td>
+                </tr>
+                <tr>
+                  <td><div class="mod-name">Reporting & Export Suite</div></td>
+                  <td><div class="mod-note">PDF, Excel, and board-ready formats</div></td>
+                  <td>$4,800</td>
+                </tr>
+                <tr>
+                  <td><div class="mod-name">Implementation & Onboarding</div></td>
+                  <td><div class="mod-note">8 hours staff training included</div></td>
+                  <td>$3,500</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="totals-block">
+              <div class="totals-row">
+                <span class="totals-row-label">Subtotal</span>
+                <span class="totals-row-val">$23,000</span>
+              </div>
+              <div class="totals-row">
+                <span class="totals-row-label">Deposit (due at signing)</span>
+                <span class="totals-row-val" style="color:#D44B4B">−$5,000</span>
+              </div>
+              <div class="totals-row total-main">
+                <span class="totals-row-label">Year 1 Balance</span>
+                <span class="totals-row-val">$18,000</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-footer">
+            <div>
+              <div class="footer-brand">Flowlyst</div>
+              <div class="footer-sub">flowlyst.com · aziz@flowlyst.com</div>
+            </div>
+            <div class="footer-note">
+              This proposal is valid for 30 days.<br>
+              Questions? aziz@flowlyst.com
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+
+  <script>
+    const views = {
+      dashboard: document.getElementById('dashboard-view'),
+      form:      document.getElementById('form-view'),
+      preview:   document.getElementById('preview-view'),
+    };
+
+    function setView(name, title, showNewBtn) {
+      Object.entries(views).forEach(([key, el]) => {
+        if (key === 'dashboard') {
+          el.style.display = name === 'dashboard' ? 'block' : 'none';
+        } else {
+          el.classList.toggle('active', key === name);
+        }
+      });
+      document.getElementById('topbar-title').textContent = title;
+      document.getElementById('new-btn').style.display = showNewBtn ? 'inline-flex' : 'none';
+
+      // Update active nav
+      document.querySelectorAll('.nav-item').forEach((el, i) => {
+        el.classList.toggle('active', i === (name === 'dashboard' ? 0 : 1));
+      });
+    }
+
+    function showDashboard() { setView('dashboard', 'Dashboard', true); }
+    function showForm()      { setView('form', 'New Proposal', false); }
+    function showPreview()   { setView('preview', 'Proposal Preview', false); }
+
+    function setFilter(btn) {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function toggleMod(el) {
+      el.classList.toggle('on');
+      const check = el.querySelector('.module-check');
+      if (el.classList.contains('on')) {
+        check.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20,6 9,17 4,12"/></svg>';
+      } else {
+        check.innerHTML = '';
+      }
+    }
+  </script>
+
+</body>
+</html>

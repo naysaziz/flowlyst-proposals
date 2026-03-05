@@ -1,8 +1,8 @@
 # flowlyst Proposal App — Retrospective
 
 ## Current State (as of 2026-03-04)
-**Phase:** Sprint 1 & 2 complete — app scaffolded, auth working, DB live, pushed to GitHub
-**Next action:** Sprint 3 — Admin panel (users/invite management, org types, modules, content blocks)
+**Phase:** Sprint 3 complete — full admin panel built and pushed to dev
+**Next action:** Sprint 4 — AI Writer (provider adapters, streaming API routes, InlineChanger, AIChatPanel, model selector)
 
 ---
 
@@ -60,14 +60,19 @@
 
 ---
 
-## Up Next
+### 2026-03-04 — Sprint 3: Admin Panel
 
-### Sprint 3: Admin Panel
-- [ ] `/admin/users` — list users, invite by email, change roles
-- [ ] `/admin/org-types` — edit org type presets + AI tone notes
-- [ ] `/admin/modules` — manage proposal modules + pricing
-- [ ] `/admin/content` — edit content blocks (About flowlyst, Terms)
-- [ ] `/admin/ai-models` — enable/disable AI models
+- ✅ `/admin/layout.tsx` — admin guard (redirects non-admins) + tabbed nav across all admin pages
+- ✅ `/admin/users` — user list with inline role editor, invite by email, revoke pending invites
+- ✅ `/admin/org-types` — edit org presets, AI tone notes, default intro/about per industry
+- ✅ `/admin/modules` — add/edit modules, toggle active, edit pricing inline
+- ✅ `/admin/content` — edit reusable content blocks (About flowlyst full/short, Terms)
+- ✅ `/admin/ai-models` — toggle switches per model, grouped by provider (Anthropic, OpenAI, Google)
+- ✅ Build passes clean, committed and pushed to `dev`
+
+---
+
+## Up Next
 
 ### Sprint 4: AI Writer
 - [ ] Vercel AI SDK provider adapters (Anthropic, OpenAI, Google)

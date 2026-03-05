@@ -1,8 +1,8 @@
 # flowlyst Proposal App — Retrospective
 
 ## Current State (as of 2026-03-04)
-**Phase:** Sprint 3 complete — full admin panel built and pushed to dev
-**Next action:** Sprint 4 — AI Writer (provider adapters, streaming API routes, InlineChanger, AIChatPanel, model selector)
+**Phase:** Sprint 4 complete — full AI writer built, build passes
+**Next action:** Sprint 5 — Training Proposal (new proposal form, editor, preview, PDF export, shareable link)
 
 ---
 
@@ -72,15 +72,31 @@
 
 ---
 
-## Up Next
+### 2026-03-04 — Sprint 4: AI Writer
 
-### Sprint 4: AI Writer
-- [ ] Vercel AI SDK provider adapters (Anthropic, OpenAI, Google)
-- [ ] `POST /api/ai/change-section` — streaming section refine endpoint
-- [ ] `POST /api/ai/generate-proposal` — full proposal generator
-- [ ] `InlineChanger.tsx` — "Change with AI" per-section UI
-- [ ] `AIChatPanel.tsx` — slide-out chat panel
-- [ ] Model selector dropdown in topbar (saves to user preferences)
+- ✅ `src/lib/ai/providers/anthropic.ts` — streams via `@anthropic-ai/sdk` `messages.stream()`
+- ✅ `src/lib/ai/providers/openai.ts` — streams via `openai` `chat.completions.create({ stream: true })`
+- ✅ `src/lib/ai/providers/google.ts` — streams via `@google/generative-ai` `generateContentStream()`
+- ✅ `src/lib/ai/generate.ts` — unified router: routes to provider by model slug prefix (`claude-`, `gpt-`, `gemini-`)
+- ✅ `POST /api/ai/change-section` — loads `proposal-writer-skill.md`, builds context message, returns `text/plain` stream
+- ✅ `POST /api/ai/generate-proposal` — full proposal generation with section targeting
+- ✅ `src/components/ai/InlineChanger.tsx` — 4-state machine (idle → open → streaming → preview), Accept/Reject
+- ✅ `src/components/ai/AIChatPanel.tsx` — slide-out 420px panel, section selector, streaming chat, "Apply to proposal"
+- ✅ `src/contexts/ModelContext.tsx` — React context, syncs preferred_model to/from `user_preferences` table
+- ✅ `src/components/ui/ModelSelector.tsx` — dropdown grouped by provider (Anthropic/OpenAI/Google), persists to DB
+- ✅ Dashboard topbar updated to include `ModelSelector`
+- ✅ `(app)/layout.tsx` wraps with `ModelProvider` (server-fetches default model)
+- ✅ Build passes clean (`next build` ✓)
+
+**Architecture notes:**
+- Streaming uses `ReadableStream<Uint8Array>` returned directly as `Response` body (`text/plain`)
+- Frontend reads with `fetch` + `response.body.getReader()` (no AI SDK client hooks needed)
+- Model routing by slug prefix: `claude-*` → Anthropic, `gpt-*`/`o1-*` → OpenAI, `gemini-*` → Google
+- `ModelProvider` server-reads preferred model, `ModelContext` client-syncs changes back to DB
+
+---
+
+## Up Next
 
 ### Sprint 5: Training Proposal
 - [ ] New proposal form (training type, template-first, org-type selector)
@@ -91,7 +107,7 @@
 ---
 
 ## Blockers / Waiting On
-- API keys still needed: Anthropic, OpenAI, Google (for AI writer — Sprint 4)
+- API keys needed in `.env.local`: Anthropic, OpenAI, Google (replace placeholder values)
 - Brand assets still needed: logo SVGs, Cera Round Pro fonts (optional polish)
 
 ---

@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import ModelSelector from "@/components/ui/ModelSelector";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -21,16 +22,19 @@ export default async function DashboardPage() {
         <h1 className="text-[18px] font-black text-[var(--dark)] tracking-tight">
           Dashboard
         </h1>
-        <Link
-          href="/proposals/new"
-          className="inline-flex items-center gap-2 px-4 py-[9px] rounded-[9px] bg-[var(--teal)] text-white text-[13.5px] font-bold hover:bg-[var(--teal-dark)] transition-all hover:-translate-y-px hover:shadow-teal"
-        >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-          New Proposal
-        </Link>
+        <div className="flex items-center gap-3">
+          <ModelSelector />
+          <Link
+            href="/proposals/new"
+            className="inline-flex items-center gap-2 px-4 py-[9px] rounded-[9px] bg-[var(--teal)] text-white text-[13.5px] font-bold hover:bg-[var(--teal-dark)] transition-all hover:-translate-y-px hover:shadow-teal"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            New Proposal
+          </Link>
+        </div>
       </header>
 
       <div className="p-8">

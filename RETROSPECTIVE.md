@@ -1,8 +1,8 @@
 # flowlyst Proposal App — Retrospective
 
 ## Current State (as of 2026-03-04)
-**Phase:** Sprint 4 complete — full AI writer built, build passes
-**Next action:** Sprint 5 — Training Proposal (new proposal form, editor, preview, PDF export, shareable link)
+**Phase:** Sprint 5 complete — full training proposal flow built, build passes clean
+**Next action:** Test end-to-end (add API keys → create law firm proposal → preview → export PDF)
 
 ---
 
@@ -96,13 +96,36 @@
 
 ---
 
+### 2026-03-04 — Sprint 5: Training Proposal
+
+- ✅ `/proposals/new` — client-side new proposal form: client info, org type picker, module checkboxes, total preview, creates proposal + modules in DB
+- ✅ `/proposals/[id]` — full editor: all content sections, auto-save (2.5s debounce), status selector, module pricing sidebar, share link copy, links to preview + PDF
+- ✅ `ProposalEditor.tsx` — client component with InlineChanger on every section + AIChatPanel toggle
+- ✅ `ProposalPreview.tsx` — branded render component: cover page, all sections, investment table, hourly page, terms
+- ✅ `/proposals/[id]/preview` — dark toolbar (back, copy share link, export PDF) + preview in white paper container
+- ✅ `PreviewToolbar.tsx` — client component for interactive buttons in server page
+- ✅ `/share/[uuid]` — public page (anon Supabase key), reads by `share_uuid`, no auth needed
+- ✅ `/api/pdf/[id]` — Puppeteer: service role fetch → `buildProposalHTML()` → `page.setContent()` → PDF download
+- ✅ `src/lib/pdf.ts` — full HTML template with inline CSS for PDF generation (no Puppeteer URL navigation)
+- ✅ `next.config.mjs` — `serverComponentsExternalPackages: ['puppeteer']`
+- ✅ Build passes clean (`next build` ✓) — 15 routes
+
+**Architecture notes:**
+- PDF route uses `page.setContent(html)` (not `page.goto(url)`) — avoids auth issues entirely
+- Share page uses anon key for proposal data, service role for consulting rates + content blocks
+- Auto-save: `useEffect` watches all state fields, 2.5s debounce, visual "Saving…/Saved ✓/Save" indicator
+- Modules sidebar: toggle included/excluded + inline price override → delete-and-reinsert on save
+
+---
+
 ## Up Next
 
-### Sprint 5: Training Proposal
-- [ ] New proposal form (training type, template-first, org-type selector)
-- [ ] Training proposal preview component (flowlyst branded)
-- [ ] PDF export (`/api/pdf/[id]`)
-- [ ] Shareable link (`/share/[uuid]`)
+**All core phases complete.** Remaining polish / future work:
+- Add proposal templates (seed `proposal_templates` table from admin) for true template-first pre-fill
+- Phase 2: Software/Budget proposals
+- Phase 3: Salary Projection proposals
+- Polish: Cera Round Pro fonts, logo SVG assets, email sharing
+- Vercel deployment
 
 ---
 

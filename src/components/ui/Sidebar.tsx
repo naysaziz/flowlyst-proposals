@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -61,22 +62,15 @@ export default function Sidebar({ user }: { user: UserProfile | null }) {
     <aside className="w-[248px] min-h-screen bg-white border-r border-[#EBEBEB] flex flex-col fixed left-0 top-0 bottom-0 z-50">
       {/* Brand */}
       <div className="px-5 py-[22px] border-b border-[#F2F2F2]">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="w-[38px] h-[38px] rounded-[11px] bg-brand-gradient flex items-center justify-center shadow-teal flex-shrink-0">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M5 4h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5V4z" fill="white" />
-              <path d="M5 11h9a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5v-4z" fill="rgba(255,255,255,0.75)" />
-              <path d="M5 18h11a1 1 0 0 1 1 1v1H5v-2z" fill="rgba(255,255,255,0.5)" />
-            </svg>
-          </div>
-          <div>
-            <div className="text-[17px] font-black text-[var(--dark)] tracking-tight leading-none">
-              flowlyst
-            </div>
-            <div className="text-[10.5px] font-bold text-[var(--teal)] uppercase tracking-[1.2px] mt-0.5">
-              Proposals
-            </div>
-          </div>
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/images/logo-full-color.png"
+            alt="flowlyst"
+            width={130}
+            height={36}
+            style={{ height: 36, width: "auto" }}
+            priority
+          />
         </Link>
       </div>
 

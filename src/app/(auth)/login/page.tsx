@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -23,18 +24,17 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg)]">
       <div className="w-full max-w-sm animate-fade-up">
         {/* Logo / brand */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-[14px] bg-brand-gradient shadow-teal mb-5">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-              <path d="M5 4h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5V4z" fill="white" />
-              <path d="M5 11h9a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5v-4z" fill="rgba(255,255,255,0.75)" />
-              <path d="M5 18h11a1 1 0 0 1 1 1v1H5v-2z" fill="rgba(255,255,255,0.5)" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-black text-[var(--dark)] tracking-tight">
-            flowlyst
-          </h1>
-          <p className="text-sm font-semibold text-[var(--muted)] mt-1 uppercase tracking-widest">
+        <div className="flex flex-col items-center mb-10">
+          <Image
+            src="/images/logo-full-color.png"
+            alt="flowlyst"
+            width={160}
+            height={44}
+            style={{ height: 44, width: "auto" }}
+            priority
+            className="mb-3"
+          />
+          <p className="text-sm font-semibold text-[var(--muted)] uppercase tracking-widest">
             Proposals
           </p>
         </div>

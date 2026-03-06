@@ -1,8 +1,8 @@
 # flowlyst Proposal App — Retrospective
 
-## Current State (as of 2026-03-04)
-**Phase:** Sprint 5 complete — full training proposal flow built, build passes clean
-**Next action:** Test end-to-end (add API keys → create law firm proposal → preview → export PDF)
+## Current State (as of 2026-03-06)
+**Phase:** Sprint 5 + PDF visual redesign complete — full Brick-style proposal with static brand pages
+**Next action:** Test full PDF end-to-end, commit, then decide on cover subtitle field
 
 ---
 
@@ -147,13 +147,69 @@
 
 ---
 
+### 2026-03-06 — PDF Visual Redesign (Session 6)
+
+**Brand images added to `public/images/`** (committed as "images"):
+- `logo-full-color.png`, `logo-full-white.png`, `logo-icon-color.png`, `logo-icon-white.png`
+- `pattern-strip.png`, `pattern-accent.png`, `pattern-accent-white.png`
+- `aziz-photo.png`
+- Favicon added to `src/app/`
+
+**PDF redesign — matching Brick Hourly Consulting Proposal style:**
+- ✅ `src/lib/pdf.ts` rewritten: two-column cover, logo/pattern images as base64, running Puppeteer header/footer
+- ✅ `src/app/api/pdf/[id]/route.ts` updated: loads all 7 PNGs as base64 at request time, proper page margins (`top:68px, right:64px, bottom:52px, left:64px`), `displayHeaderFooter:true`
+- ✅ `src/components/ui/Sidebar.tsx` — replaced SVG with `logo-full-color.png` via `next/image`
+- ✅ `src/app/(auth)/login/page.tsx` — replaced SVG with `logo-full-color.png` via `next/image`
+- ✅ Fixed TypeScript error: `client_org_type` field didn't exist on `ProposalData` — removed reference
+- ✅ Nunito font loaded via Google Fonts `<link>` in PDF HTML — applied to all body text, headings, and title
+- ✅ Pattern strip opacity set to 30% — matches Brick design (subtle, not dominant)
+- ✅ Cover subtitle added: dark text below main title (currently "AI & Workflow Automation" — to be made dynamic)
+- ✅ Playwright installed and used to visually verify cover page — matches Brick style
+
+**Verified with Playwright screenshot** — cover page confirmed matching target design.
+
+---
+
+### 2026-03-06 — Static Brand Pages + Image Masking (Session 6 continued)
+
+**Additional images added to `public/images/`:**
+- `ai-visual.png` — AI/automation visual for "Our Mission" page
+- `training-photo.jpg` — Training room photo for "Recognition" page (jpg, not png)
+- `pattern-accent-single.png` — Solid green triangle only (for page decorative accents)
+- `pattern-accent-single-white.png` — White version of single triangle
+
+**PDF restructure — full Brick proposal page order:**
+- ✅ Page 1: Cover (unchanged)
+- ✅ Page 2: **Our Mission** — static text + AI visual clipped inside triangle shape using CSS `mask-image`
+- ✅ Page 3: **Our Services** — "Automation consulting" + "Training packages" subsections
+- ✅ Page 4: **About the Trainer** — Aziz photo + `about_flowlyst_full` DB content
+- ✅ Page 5: **Recognition & Client Feedback** — testimonials + training photo + notable engagements
+- ✅ Page 6: **Relevant Engagements** — CPS case study with detailed impact metrics
+- ✅ Pages 7+: Dynamic proposal sections (each own page): Intro, Scope, Training Package, Deliverables, Timeline, Investment, Terms
+- ✅ Conditional: Hourly Consulting page
+- ✅ Last: Back cover (teal card)
+- ✅ `patternAccentSingle` used for all page decorative accents (solid triangle, positioned/sized per page)
+- ✅ Footer border updated to teal `#00A568` line (matching Brick)
+- ✅ `loadBase64()` updated to handle `.jpg`/`.jpeg` with correct mime type
+- ✅ Build passes clean (15 routes)
+
+**CSS triangle mask on Our Mission page:**
+- `ai-visual.png` is clipped to the flowlyst triangle shape using `-webkit-mask-image` / `mask-image` with `pattern-accent-single.png` as the mask
+- Verified visually with Playwright screenshot — matches Brick "Our Mission" design
+
+**Dev server note:** Two Next.js servers running — latest code on port 3002 (started this session), older server on port 3000.
+
+---
+
 ## Up Next
 
-**All core phases complete.** Remaining polish / future work:
+- Test full PDF end-to-end via `/api/pdf/[id]`
+- Decide on cover subtitle field (currently hardcoded "AI & Workflow Automation" — make dynamic or per proposal type)
+- Commit all PDF redesign work to dev branch
 - Phase 2: Software/Budget proposals
 - Phase 3: Salary Projection proposals
-- Polish: Cera Round Pro fonts, logo SVG assets, email sharing
 - Vercel deployment
+- Email sharing
 
 ---
 
